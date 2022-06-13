@@ -15,6 +15,6 @@ class TeacherHistory extends Model
     //get all groups
     public function scopeGetTeacherHistories($query, $teacher_id){
         return $query->where('teacher_id', $teacher_id)
-        ->orderBy(DB::raw("year asc, group_name asc, created_at"), 'desc');
+        ->orderBy(DB::raw("year asc, group_name asc, created_at"), 'desc')->get();
     }
 }

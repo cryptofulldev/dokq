@@ -120,7 +120,7 @@
 												<th>出典ページ</th>
 												<th>名前</th>
 												<th>クイズID</th>
-												<th>編集/削除</th>
+												<th>編集</th>
 											</tr>
 										</thead>
 										@if(isset($type) && $type == '1')

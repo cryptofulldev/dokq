@@ -1,4 +1,4 @@
-<table class="table table-striped table-bordered table-hover data-table" style="width:100%" id="sample_1">
+<table class="table table-striped table-bordered table-hover data-table" style="width:120%" id="sample_1">
     <thead>
         <tr class="bg-primary">
             <th width="30%">タイトル</th>

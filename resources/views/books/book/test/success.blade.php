@@ -63,8 +63,8 @@
 						<tr>
 							<td class="h4 text-md-right">続けて違う本を受検</td>
 							<td class="text-md-left">
-								<a href="{{url('/book/search')}}" class="btn btn-warning">本を検索して受検</a>
-								<a href="{{url('/mypage/wish_list')}}" class="btn btn-warning">マイ書斎から受検</a>
+								<a href="{{url('/book/search')}}" class="btn btn-warning" style="margin-top: 5px; margin-bottom: 5px">本を検索して受検</a>
+								<a href="{{url('/mypage/wish_list')}}" class="btn btn-warning" style="margin-top: 5px; margin-bottom: 5px">マイ書斎から受検</a>
 							</td>
 						</tr>
 						<tr>

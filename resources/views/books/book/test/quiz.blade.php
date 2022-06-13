@@ -159,13 +159,16 @@
 							<h4 style="color:#f00;">合格です</h4>
 						</div>
 						<div class="form-group" style="margin-bottom:0px;">
-							<label class="offset-md-2 control-label col-md-9 text-md-left" style="font-size:14px;">試験監督によって合格を認証されると、完了します。<br>開始時と同じ認証方法を選んでください。</label>
+							<label class="offset-md-2 control-label col-md-9 text-md-left" style="font-size:14px;">試験監督が認証すると、完了します。<br>スタート時と同じ方法をえらんでください。</label>
 						</div>
 						
+						<div class="form-group text-md-center" style="text-align:center">
+							<button type="button" class="btn btn-success" id="teacher_recog">先生の認証</button>
+					 	</div>
 					 	<div class="form-group text-md-center" style="text-align:center">
 							<button type="button" class="btn btn-warning" id="face_recog" @if(!isset($password) || (isset($password) && $password == "")) disabled @endif>顔 認 証</button>
 					 	</div>
-					 	<div class="form-group" align="center">
+					 	<!-- <div class="form-group" align="center">
 					 		<div class="offset-md-3 col-md-6">               
 			                    <div>
 			                        <label class="label-above">教師パスワードによる認証</label>                                                   
@@ -173,7 +176,7 @@
 			                    <input type="password" class="form-control" name="password" id="password" value="" readonly>
 								<span class="help-block " id="password_error"></span>
 			                </div>
-					 	</div>
+					 	</div> -->
 
 					 	<div class="form-group">
 					 		<label class="offset-md-2 control-label col-md-9 text-md-left" style="color:#f00;font-size:14px;">
@@ -190,8 +193,8 @@
 					</form>
 				</div>
 				<div class="modal-footer text-md-center text-sm-center">
-					<button type="button" data-loading-text="確認中..." class="send_password btn btn-primary" style="margin-bottom:8px">送　信</button>
-					<button type="button" data-dismiss="modal" class="btn btn-info modal-close" style="margin-bottom:8px">戻　る</button>
+					<!-- <button type="button" data-loading-text="確認中..." class="send_password btn btn-primary" style="margin-bottom:8px">送　信</button> -->
+					<button type="button" data-dismiss="modal" class="btn btn-info modal-close" style="margin-bottom:8px">不合格に変更</button>
 				</div>
 				
 			</div>
@@ -218,7 +221,10 @@
 				socket.emit('test-start', JSON.stringify(datas));
 			}
 		});
-		   
+
+		$("#teacher_recog").click(function() {
+			socket.emit('test-pupil', JSON.stringify(datas))
+		})
 
 		history.pushState(null, null, location.href);
 			window.onpopstate = function () {

@@ -264,7 +264,7 @@ class AdminController extends Controller
     public function can_book_list(){
         $this->page_info['side'] = 'can_list';
         $this->page_info['subside'] = 'can_book_list';
-        $books = Books::whereBetween('active', [1,6])->orderby('created_at', 'desc')->get();
+        $books = Books::whereBetween('active', [1,6])->orderby('created_at', 'desc')->paginate(30);
         return view('admin.can_book_list')
             ->with('page_info', $this->page_info)
             ->withBooks($books);
@@ -2321,11 +2321,16 @@ class AdminController extends Controller
             ->withNotices($notices);*/
         //update 18.07.21
         $date = $request->input('add_date');
+        $link = '';
         $contentflag = null;
         if ($request->input('content') != ''){
             $content = $request->input('content');
+            if ($request->input('outside_link') != '') {
+                $link = $request->input('outside_link');
+            }
             $created_at = date_create($date);
             $notices_add = new Notices();
+            $notices_add->outside_link = $link;
             $notices_add->created_at = $created_at;
             $notices_add->updated_at = $created_at;
             $notices_add->content = $content;
@@ -2345,9 +2350,10 @@ class AdminController extends Controller
         $id = $request->input('update_id');
         $date = $request->input('update_date');
         $content = $request->input('update_content');
+        $link = $request->input('update_outside_link');
         $update = DB::table('notices')
                     ->where('id','=',$id)
-                    ->update(['content' => $content,'updated_at' => $date]);
+                    ->update(['content' => $content, 'outside_link' => $link, 'updated_at' => $date]);
         $notices = Notices::paginate(3);
         // $notices = $notices->paginate(3);
         return view('admin.notice_add_edit')

@@ -71,7 +71,13 @@
 								<td class="align-middle col-md-1">{{ $user->address1."  ".$user->address2 }}</td>
 								<td class="align-middle"><a href="mailto:{{$user->email}}">{{$user->email}}</a></td>
 								<td class="align-middle"></td>
-								<td class="align-middle"><a class="btn btn-email btn-warning" href="{{url('/admin/unsubscribe_email/'.$user->id)}}" style="padding-top: 0; padding-bottom:0; color: #FFF; font-weight:600">送信</a></td>
+								<td class="align-middle">
+									@if (!$user->unsubscribe_date) 
+									<a class="btn btn-email btn-warning" href="{{url('/admin/unsubscribe_email/'.$user->id)}}" style="padding-top: 0; padding-bottom:0; color: #FFF; font-weight:600">送信</a>
+									@else
+									{{"送信済"}}
+									@endif
+								</td>
 								<td class="align-middle">{{$user->unsubscribe_date? with(date_create($user->unsubscribe_date))->format('Y/m/d'): ""}}</td>
 								
 							</tr>

@@ -109,8 +109,15 @@ class HomeController extends Controller
         $result = DB::table('users')
             ->where('id',Auth::id())
             ->update(['reload_flag' => 8]);
-        $settlement_flag = CertiBackup::where('user_id', Auth::id())->where('settlement_date','<',date_add(now(),date_interval_create_from_date_string("1 months")))->first();    
-        if((is_object($settlement_flag) || is_array($settlement_flag)) && count(get_object_vars($settlement_flag))){
+        $settlement_flag = CertiBackup::where('user_id', Auth::id())->where('settlement_date','<',date_add(now(),date_interval_create_from_date_string("1 months")))->first();  
+        if ($settlement_flag && is_object($settlement_flag)) {
+            $certi_message_check = Messages::where('to_id', Auth::id())
+                                            ->where('content', 'like', '%(パスコード'.$settlement_flag->passcode.')%')
+                                            ->where('created_at', '>', date_format(date_sub(date_create($settlement_flag->settlement_date), date_interval_create_from_date_string('2 weeks')), "Y-m-d"))
+                                            ->count();
+        } else $certi_message_check = 0;
+
+        if((is_object($settlement_flag) || is_array($settlement_flag)) && count(get_object_vars($settlement_flag)) && $certi_message_check == 0 && date_sub(date_create($settlement_flag->settlement_date), date_interval_create_from_date_string('2 weeks')) <= now() && date_create($settlement_flag->settlement_date) > now()){
             $message = new Messages;
             $message->type = 0;
             $message->from_id = 0;

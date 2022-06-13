@@ -236,8 +236,13 @@ class LoginController extends Controller
                                                 ->whereNotNull('settlement_date')
                                                 ->where('settlement_date' ,'<', $next_month_date)
                                                 ->first();
-                
-                        if($settlement_check > 0){
+                        if ($certi_back && is_object($certi_back)) {
+                            $certi_message_check = Messages::where('to_id', $user->id)
+                                                ->where('content', 'like', '%(パスコード'.$certi_back->passcode.')%')
+                                                ->where('created_at', '>', date_format(date_sub(date_create($certi_back->settlement_date), date_interval_create_from_date_string('2 weeks')), "Y-m-d"))
+                                                ->count();
+                        } else $certi_message_check = 0;
+                        if($certi_back && $settlement_check > 0 && date_sub(date_create($certi_back->settlement_date), date_interval_create_from_date_string('2 weeks')) <= now() && date_create($certi_back->settlement_date) > now() && $certi_message_check == 0){
                             $message = new Messages;
                             $message->type = 0;
                             $message->from_id = 0;
@@ -536,7 +541,11 @@ class LoginController extends Controller
                                 ->where('settlement_date' ,'<', $next_month_date)
                                 ->first();
                 
-        if($settlement_check > 0){
+        $certi_message_check = Messages::where('to_id', $user->id)
+                                ->where('content', 'like', '%(パスコード'.$certi_back->passcode.')%')
+                                ->where('created_at', '>', date_format(date_sub(date_create($certi_back->settlement_date), date_interval_create_from_date_string('2 weeks')), "Y-m-d"))
+                                ->count();
+        if($settlement_check > 0 && date_sub(date_create($certi_back->settlement_date), date_interval_create_from_date_string('2 weeks')) <= now() && date_create($certi_back->settlement_date) > now() && $certi_message_check == 0){
             $message = new Messages;
             $message->type = 0;
             $message->from_id = 0;

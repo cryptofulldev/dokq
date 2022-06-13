@@ -36,7 +36,7 @@
 						
 						<div class="form-body row">
 							@if($counts > 0)
-							<div class="col-md-12">
+							<div class="col-md-12" style="width: 100%; overflow-x: auto">
 								@include('books.book.search_result.results')
 							</div>
 							@elseif ($counts == 0)
@@ -187,7 +187,11 @@
 			$(".author_view").on('click', function(e){
 				var writher_id = $(this).attr('did');
 				if(writher_id == 0 || writher_id == "" || writher_id == null){
-					$("#myAuthorModal").modal('show');
+					var queryString = window.location.search;
+					var baseUrl = location.origin;
+
+					location.href = "{{url('book/search_result')}}/";
+					// $("#myAuthorModal").modal('show');
 				}
 				else{
 					location.href = "{{url('mypage/other_view')}}/" + writher_id

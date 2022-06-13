@@ -46,7 +46,13 @@
 								</div>								
 							</div>
 							<div class="form-group row">
-								<label class="col-md-5 control-label" style="font-size: 16px">監督の顔認証</label>
+								<label class="col-md-5 control-label" style="font-size: 16px">先生の認証</label>
+								<div class="col-md-3" style="display: flex; align-items: center">
+									<input name="teacher_cert" id="teacher_cert" type="checkbox" style="margin-top: 20%">
+								</div>								
+							</div>
+							<div class="form-group row">
+								<label class="col-md-5 control-label" style="font-size: 16px">顔認証</label>
 								<div class="col-md-3" style="display: flex; align-items: center">
 									<input name="is_face" id="is_face" type="checkbox" style="margin-top: 20%">
 								</div>								
@@ -76,7 +82,12 @@
 			var datas = {
 				id: '<?php echo Auth::id(); ?>'
 			};
-			socket.emit('test-pupil', JSON.stringify(datas));
+
+			$('#teacher_cert').change(function() {
+				if($(this).attr("checked") == "checked"){
+					socket.emit('test-pupil', JSON.stringify(datas));
+				}
+			})
 
 			socket.on('test-password', function(msg){
 				var data = JSON.parse(msg);
@@ -107,17 +118,28 @@
 				location.reload();
 			});
 			$('input[type="checkbox"]').change(function(){
-                if($(this).attr("checked") == "checked"){
-                    $("#next_btn").removeAttr("disabled");
-                }else{
-                    $("#next_btn").attr("disabled","");
-                }
+				var id = $(this).attr("id");
+				if (id == "teacher_cert" && $(this).attr("checked") == "checked") {
+					$("#id_face").attr("checked", "");
+				} else if (id == "teacher_cert" && $(this).attr("checked") != "checked") {
+					$("#id_face").attr("checked", "checked");
+				} else if (id != "teacher_cert" && $(this).attr("checked") == "checked") {
+					$("#teacher_cert").attr("checked", "");
+				} else {
+					$("#teacher_cert").attr("checked", "checked");
+				}
+				if($(this).attr("checked") == "checked"){
+						$("#next_btn").removeAttr("disabled");
+				}else{
+						$("#next_btn").attr("disabled","");
+				}
 			});
 			$("#next_btn").click(function(){
 				var is_face = $("#is_face").attr("checked");
+				var teacher_cert = $("#teacher_cert").attr("checked");
 				if(is_face == "checked"){
 					$("#test-password-form").attr("action", "/book/test/signin_overseer");
-				} else {
+				} else if (teacher_cert != "checked") {
 				    $("#test-password-form").attr("action", "/book/test/start");
 				}
 				$("#test-password-form").submit();

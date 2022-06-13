@@ -583,6 +583,11 @@
             
         });
 
+        $("#dqid").click(function () {
+            var book_id = $("#id").val();
+            location.href = `{{url('book/${book_id}/detail')}}`
+        })
+
         var articledel = function(delete_id){
             $("#delete_id").val(delete_id); 
             $("#alert_text").html("{{config('consts')['MESSAGES']['CONFIRM_DELETE']}}");

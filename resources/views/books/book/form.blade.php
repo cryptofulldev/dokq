@@ -37,7 +37,7 @@
 		<h4 class="form-section warning"><strong>@if(isset($book)) 本の基本情報を編集 @else 本の基本情報を入力します @endif</strong></h4>
 		<div class="row top-border">
 			<div class="col-md-12 margin-bottom-5 {{ $errors->has('type') ? ' has-danger' : '' }}">
-				<label class="control-label col-md-7 text-md-left f-14"><strong>1.&nbsp;&nbsp;&nbsp;&nbsp;本の種類</strong></label>
+				<label class="control-label col-md-7 text-md-left f-14"><strong>1.&nbsp;&nbsp;&nbsp;&nbsp;本の登録方法の選択</strong></label>
 				<div class="col-md-5">
 					<input type="hidden" id="book_form_flag" name="book_form_flag"/>
 					<select class="bs-select" name="type" id="type" style="height:33px !important">

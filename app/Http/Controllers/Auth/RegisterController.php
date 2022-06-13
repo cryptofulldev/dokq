@@ -706,35 +706,6 @@ class RegisterController extends Controller
             || $role == config('consts')['USER']['ROLE']['OTHER']) {
             $user->aptitude = 1;
         }
-        if($role == config('consts')['USER']['ROLE']['GROUP']) {
-            if(RegisterController::isHiragana($group_yomi)){
-                $user->save();
-            }
-        }
-        else{
-            $user->save();
-        }        
-        
-        // try{
-        //     Mail::to($user->email)->send(new Restore($user));
-        //     //admin
-        //     $admin = User::find(1);
-        //     $personadminHistory = new PersonadminHistory();
-        //     $personadminHistory->user_id = $admin->id;
-        //     $personadminHistory->username = $admin->username;
-        //     $personadminHistory->item = 0;
-        //     $personadminHistory->work_test = 13;
-        //     $personadminHistory->bookregister_name = $user->username;
-        //     $personadminHistory->content = '会員登録申請回答';
-        //     $personadminHistory->save();
-        // }catch(Swift_TransportException $e){
-        //     //$user->delete();
-        //     return Redirect::back()
-        //         ->withErrors(["servererr" => config('consts')['MESSAGES']['EMAIL_SERVER_ERROR']])
-        //         ->withInput()
-        //         ->withTitle($title);
-        // } 
-        // $user->replied_date1 = now();      
         // if($role == config('consts')['USER']['ROLE']['GROUP']) {
         //     if(RegisterController::isHiragana($group_yomi)){
         //         $user->save();
@@ -742,7 +713,37 @@ class RegisterController extends Controller
         // }
         // else{
         //     $user->save();
-        // }
+        // }        
+        if ($role == config('consts')['USER']['ROLE']['GENERAL']) {
+            try{
+                Mail::to($user->email)->send(new Restore($user));
+                //admin
+                $admin = User::find(1);
+                $personadminHistory = new PersonadminHistory();
+                $personadminHistory->user_id = $admin->id;
+                $personadminHistory->username = $admin->username;
+                $personadminHistory->item = 0;
+                $personadminHistory->work_test = 13;
+                $personadminHistory->bookregister_name = $user->username;
+                $personadminHistory->content = '会員登録申請回答';
+                $personadminHistory->save();
+            }catch(Swift_TransportException $e){
+                //$user->delete();
+                return Redirect::back()
+                    ->withErrors(["servererr" => config('consts')['MESSAGES']['EMAIL_SERVER_ERROR']])
+                    ->withInput()
+                    ->withTitle($title);
+            } 
+            $user->replied_date1 = now();      
+        }
+        if($role == config('consts')['USER']['ROLE']['GROUP']) {
+            if(RegisterController::isHiragana($group_yomi)){
+                $user->save();
+            }
+        }
+        else{
+            $user->save();
+        }
 
         return Redirect::to('auth/reg_step1/'.$role.'/suc')
             ->withTitle($title);

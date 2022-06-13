@@ -277,9 +277,9 @@
                         <label class="label-above">現有効期限</label>                                                   
                     </div>  
                     @if($user->isPupil())
-                    <input type="{{"text"}}" name="payment" class="form-control" id="payment" value="@if($user->properties == 0){{config('consts')['PAYMENT_METHOD'][0]}}@elseif($user->pay_content !== null && $user->pay_content !== ''){{config('consts')['PAY_LIST'][$user->pay_content].$user->pay_amount.'円'.$user->period}}@else{{''}}@endif"  readonly>
+                    <input type="{{"text"}}" name="payment" class="form-control" id="payment" value="@if($user->active >= 2){{date_format(date_create($user->updated_at), 'Y年m月d日').'より準会員'}} @else @if($user->properties == 0){{config('consts')['PAYMENT_METHOD'][0]}}@elseif($user->pay_content !== null && $user->pay_content !== ''){{config('consts')['PAY_LIST'][$user->pay_content].$user->pay_amount.'円'.$user->period}}@else{{''}}@endif @endif"  readonly>
                     @else
-                    <input type="{{"text"}}" name="payment" class="form-control" id="payment" value="@if($user->properties == 0){{''}}@elseif($user->pay_content !== null && $user->pay_content !== ''){{config('consts')['PAY_LIST'][$user->pay_content].$user->pay_amount.'円'.$user->period}}@else{{''}}@endif"  readonly>
+                    <input type="{{"text"}}" name="payment" class="form-control" id="payment" value="@if($user->active >= 2){{date_format(date_create($user->updated_at), 'Y年m月d日').'より準会員'}} @else @if($user->properties == 0){{''}}@elseif($user->pay_content !== null && $user->pay_content !== ''){{config('consts')['PAY_LIST'][$user->pay_content].$user->pay_amount.'円'.$user->period}}@else{{''}}@endif @endif"  readonly>
                     @endif
 
                 </div>

@@ -54,6 +54,24 @@
 												</div>
 											</div>
 										</div>
+										@if($notice->outside_link != '')
+										<div class="col2" style="display: flex; flex-direction: column; align-items: flex-start">
+											<div class="cont">
+												<div class="cont-col2">
+													<div class="desc">
+														詳細については下記URLをクリック！
+													</div>
+												</div>
+											</div>
+											<div class="cont">
+												<div class="cont-col2">
+													<div class="desc">
+														<a href="{{$notice->outside_link}}" target="__blank">{{$notice->outside_link}}</a>
+													</div>
+												</div>
+											</div>
+										</div>
+										@endif
 									<!-- </a> -->
 								</li>
 								@endforeach

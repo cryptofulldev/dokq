@@ -60,6 +60,9 @@
 					<form class="form-horizontal form" role="form">
 						<div class="form-group row">
 							<div class="col-md-4">
+								<?php
+									var_dump($classes)
+								?>
 								<select class="bs-select form-control" id="select_class">
 									<option value=""></option>
 									<?php $__currentLoopData = $classes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $class): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>

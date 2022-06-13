@@ -506,7 +506,7 @@
 			
 			<div class="form-group row">
 				<label class="control-label col-md-6 text-md-right" for="teacher" id="descripte" style="align-self:center">					
-				<span style="margin-right: 5%">再開可能な読Ｑネームをお持ちの方は、右記に入力</span> &nbsp;読Qネーム（半角） :  
+				<span style="margin-right: 5%">再開可能な読Ｑネームをお持ちの方は、入力</span> &nbsp;読Qネーム（半角） :  
 					<!-- 読Ｑネームを持っている場合、入力　	 -->
 				</label>
 				<div class="col-md-3">
