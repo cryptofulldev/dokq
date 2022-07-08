@@ -1,6 +1,15 @@
 @extends('layout')
 @section('styles')
- 
+	<style>
+		.full-response-width {
+			width: 100%;
+		}
+		@media screen and (max-width: 590px) {
+			.full-response-width {
+				width: 120%;
+			}
+		}
+	</style>
 @stop
 @section('breadcrumb')
 	<div class="breadcum">
@@ -186,11 +195,13 @@
 
 			$(".author_view").on('click', function(e){
 				var writher_id = $(this).attr('did');
+				var fullname = $(this).attr('fullname');
+				console.log('[first name and last name nick]', fullname);
 				if(writher_id == 0 || writher_id == "" || writher_id == null){
 					var queryString = window.location.search;
 					var baseUrl = location.origin;
 
-					location.href = "{{url('book/search_result')}}/";
+					location.href = "{{url('book/search_books_byauthor')}}" + "?fullname=" + fullname;
 					// $("#myAuthorModal").modal('show');
 				}
 				else{

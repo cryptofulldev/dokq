@@ -24,6 +24,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use App\Mail\Restore;
+use App\Model\SelfEvaluationButtons;
 use Swift_TransportException;
 
 class HomeController extends Controller
@@ -81,6 +82,7 @@ class HomeController extends Controller
             ->orderBy('updated_at', 'desc')
             ->take(4)->get();
         $advertise = Advertise::first();
+        $selfEvaluation = SelfEvaluationButtons::first();
         return view('home.index')
             ->withPage($this->page)
             ->withNosidebar(true)
@@ -88,6 +90,7 @@ class HomeController extends Controller
             ->withNotices($notices)
             ->withQuizBooks($quizBooks)
             ->with('advertise', $advertise)
+            ->with('self_evaluation', $selfEvaluation)
             ->withObBooks($overseerBooks)
             ->with('page_info',$page_info);
     }

@@ -35,7 +35,8 @@ return [
 					'book_credit'=>['TITLE'=>'読書認定書ストック', 'LOCATION'=>'/admin/book_credit', 'ICON'=>'fa fa-home'],			
 				]
 			],
-		],
+			'self_evaluation_publish' => ['TITLE'=>'自己評価シート公開ボタン', 'LOCATION'=>'/admin/self_evaluation', 'ICON'=>'fa fa-home'],
+	],
 		'GROUP' =>[
 			'group_top' => ['TITLE' => '団体トップページ', 'LOCATION' => '/top', 'ICON'=> 'fa fa-home'],
 			'basic_info' => ['TITLE' => '団体の基本情報閲覧編集', 'LOCATION' => '/group/basic_info', 'ICON'=> 'fa fa-home'],
@@ -631,7 +632,7 @@ return [
 		]
 	],
 	'BOOK' => [
-		'TYPE' => ['字数カウント済の本', '字数カウントしていない本'],
+		'TYPE' => ['字数カウントしていない本', '字数カウント済の本'],
 		// 'TYPE' => ['紙の本', '電子書籍または青空文庫', '字数カウント済みの本'],
 		'REASON' => ['既に登録されている', '読Q本の規定外', 'その他の場合入力'],
 		'CATEGORIES' => ['児童書','絵本','単行本','文庫本','新書','電子書籍','青空文庫','短編','日本の文学','海外の文学','ﾌｧﾝﾀｼﾞｰ・SF','冒険','純文学','ﾐｽﾃﾘｰ','歴史','古典','名作','ﾉﾝﾌｨｸｼｮﾝ・伝記','教養・学術','ｴｯｾｲ・評論','大人向け'],

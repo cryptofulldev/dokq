@@ -129,6 +129,7 @@ class User extends Authenticatable
     	'replied_date2',
     	'replied_date3',
         'replied_date4',
+        'paypal_stop_date',
         'escape_date',
         'settlement_date',
         'period',

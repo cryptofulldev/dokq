@@ -71,7 +71,7 @@ class UserController extends Controller
         }
     }
 
-  /*  public function postStep2(Request $request){
+    /*  public function postStep2(Request $request){
         $rule = array(
             'password' => 'string|required|max:255|min:8'
         );

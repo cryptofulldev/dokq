@@ -410,6 +410,8 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/admin/manual_quiz', 'AdminController@manual_quiz');
     Route::get('/admin/advertise', 'AdminController@advertise');
     Route::post('/admin/ad_save', 'AdminController@ad_save');
+    Route::get('/admin/self_evaluation', 'AdminController@self_evaluation_buttons');
+    Route::post('/admin/self_evaluation_save', 'AdminController@self_evaluation_save');
     Route::get('/admin/app_search_history', 'AdminController@app_search_history');
     Route::post('/admin/exportSearchbook', 'AdminController@exportSearchbook');
     Route::post('/admin/exportQuizemake', 'AdminController@exportQuizemake');
@@ -469,5 +471,6 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('/admin/deletebookByAdmin', 'AdminController@deletebookByAdmin');
     Route::post('/admin/deleteperByAdmin', 'AdminController@deleteperByAdmin');
     Route::post('/admin/deleteorgByAdmin', 'AdminController@deleteorgByAdmin');
-
+    Route::post('/admin/deleteAuthFileByAdmin', 'AdminController@deleteAuthFileByAdmin');
+    Route::post('/admin/deleteCertiFileByAdmin', 'AdminController@deleteCertiFileByAdmin');
 });

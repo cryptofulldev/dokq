@@ -199,9 +199,17 @@
 				</div>
 			</div>
 		</div>
+		<!-- <div class="row">
+			<div class="col-md-12">
+				@if (Auth::check() && Auth::user()->isAdmin() && $self_evaluation != null && $self_evaluation->evaluation_button_url != '')
+					<a href="{{url($self_evaluation->self_evaluation_sheet_url)}}" target="__blank" style="width: 200px; height: 60px">
+						<img src="{{$self_evaluation->evaluation_button_url}}" alt="" style="width: 200px; height: 60px">
+					</a>
+				@endif
+			</div>
+		</div> -->
 		</div>
 	</div>
-
 	
 @stop
 @section('scripts')

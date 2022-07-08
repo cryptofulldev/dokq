@@ -632,19 +632,19 @@
 			var pdfheight  = $(window).height() - 55;
 			$("#pdfheight").val(pdfheight);
 			
-	        $.extend($.inputmask.defaults, {
-	            'autounmask': true
-	        });
+			$.extend($.inputmask.defaults, {
+					'autounmask': true
+			});
 
-	        $("#birthday").inputmask("y/m/d", {
-	            "placeholder": "yyyy/mm/dd"
-	        }); //multi-char placeholder
-	        $("#phone").inputmask("mask", {
-	            "mask": "<?php echo config('consts')['PHONE_MASK'] ?>"
-	        });
-	        $("#address4").inputmask("mask", {
-		        "mask":"999"
-	        });
+			$("#birthday").inputmask("y/m/d", {
+					"placeholder": "yyyy/mm/dd"
+			}); //multi-char placeholder
+			$("#phone").inputmask("mask", {
+					"mask": "<?php echo config('consts')['PHONE_MASK'] ?>"
+			});
+			$("#address4").inputmask("mask", {
+				"mask":"999"
+			});
 			$("#address5").inputmask("mask", {
 		        "mask":"9999"
 	        });

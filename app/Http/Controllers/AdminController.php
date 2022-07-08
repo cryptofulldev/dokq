@@ -45,6 +45,7 @@ use App\Model\ReportBackup;
 use App\Model\ReportGraphBackup;
 use App\Model\WishLists;
 use App\Model\BookCategory;
+use App\Model\SelfEvaluationButtons;
 use App\Http\Controllers\GroupController;
 use Carbon\Carbon;
 use DB;
@@ -162,6 +163,11 @@ class AdminController extends Controller
     public function unsubscribe_email(Request $request, $user_id = null){
         $user = User::where('id', '=', $user_id)
                         ->first();
+        $paypal_stop_date = null;
+        if ($request->input("paypal_stop_date")) {
+            $paypal_stop_date = $request->input("paypal_stop_date");
+        }
+        
         if(isset($user)){
 
             try{
@@ -177,13 +183,18 @@ class AdminController extends Controller
                 $personadminHistory->content = '退会完了';
                 $personadminHistory->save();
                 $user->unsubscribe_date = now();
+                if ($paypal_stop_date != null) {
+                    $user->paypal_stop_date = $paypal_stop_date;
+                }
                 $user->save();
+                return array('success' => TRUE );
             }catch(Swift_TransportException $e){
-                return Redirect::back()
-                    ->withErrors(["servererr" => config('consts')['MESSAGES']['EMAIL_SERVER_ERROR']])
-                    ->withInput();
+                // return Redirect::back()
+                //     ->withErrors(["servererr" => config('consts')['MESSAGES']['EMAIL_SERVER_ERROR']])
+                //     ->withInput();
+                return array('success' => FALSE );
             }
-            return Redirect::back();
+            // return Redirect::back();
         }
 
     }
@@ -1007,6 +1018,80 @@ class AdminController extends Controller
        
     }
 
+    public function deleteAuthFileByAdmin(Request $request) {
+        try {
+            $id = $request->input('id');
+            $user = User::find($id);
+            $path = public_path().$user->file;
+            if (file_exists($path)) {
+                unlink($path);
+                $user->authfile = '';
+                $user->file = '';
+                $user->authfile_date = null;
+                $user->save();
+                $response = array(
+                    'status' => 'success',
+                );
+               
+                return response()->json($response);
+            } else {
+                $user->authfile = '';
+                $user->file = '';
+                $user->authfile_date = null;
+                $user->save();
+                $response = array(
+                    'status' => 'success',
+                );
+               
+                return response()->json($response);
+            }
+        } catch (Swift_TransportException $e) {
+            $response = array(
+                'status' => 'success',
+                
+            );
+           
+            return response()->json($response);
+        }
+    }
+
+    public function deleteCertiFileByAdmin(Request $request) {
+        try {
+            $id = $request->input('id');
+            $user = User::find($id);
+            $path = public_path().$user->certifile;
+            if (file_exists($path)) {
+                unlink($path);
+                $user->certifilename = '';
+                $user->certifile = '';
+                $user->certifile_date = null;
+                $user->save();
+                $response = array(
+                    'status' => 'success',
+                );
+               
+                return response()->json($response);
+            } else {
+                $user->certifilename = '';
+                $user->certifile = '';
+                $user->certifile_date = null;
+                $user->save();
+                $response = array(
+                    'status' => 'success',
+                );
+               
+                return response()->json($response);
+            }
+        } catch (Swift_TransportException $e) {
+            $response = array(
+                'status' => 'success',
+                
+            );
+           
+            return response()->json($response);
+        }
+    }
+
     public function data_card_org(Request $request, $id=null){
 
         if($id == null) return;
@@ -1443,6 +1528,14 @@ class AdminController extends Controller
         return view('admin.advertise')
             ->with('page_info', $this->page_info)
             ->with('advise', $advise);
+    }
+    public function self_evaluation_buttons(){
+        $this->page_info['side'] = 'self_evaluation_publish';
+        $this->page_info['subside'] = 'self_evaluation_publish';
+        $selfEvaluationButtons = SelfEvaluationButtons::first();
+        return view('admin.self_evaluation_button')
+            ->with('page_info', $this->page_info)
+            ->with('self_evaluation_buttons', $selfEvaluationButtons);
     }
     public function app_search_history(Request $request){
         $this->page_info['side'] = 'data_work';
@@ -3833,7 +3926,9 @@ class AdminController extends Controller
         foreach ($quizes as $key => $quiz) {
             $quiz->quizanswerright = PersontestHistory::where('quiz_id',$quiz->id)->where('item', 0)->where('work_test', 2)->get()->count();
             $quiz->quizanswerwrong = PersontestHistory::where('quiz_id',$quiz->id)->where('item', 0)->where('work_test', 3)->get()->count(); 
-            $quiz->quizanswer = PersontestHistory::where('quiz_id',$quiz->id)->where('item', 0)->where('work_test', 2)->orwhere('work_test', 3)->get()->count();
+            $quiz->quizanswer = PersontestHistory::where('quiz_id',$quiz->id)->where('item', 0)->where(function($q) {
+                $q->where('work_test', 2)->orwhere('work_test', 3);
+            })->get()->count();
             $quiz->quizanswershorttime = PersontestHistory::where('quiz_id',$quiz->id)->where('item', 0)->where('work_test', 2)->where('tested_time', '<', $quizshorttime)->get()->count();
             
         }
@@ -3862,7 +3957,9 @@ class AdminController extends Controller
             $quizshorttime = floor($book->test_short_time/$book->quiz_count);
             $quiz->quizanswerright = PersontestHistory::where('quiz_id',$quiz->id)->where('item', 0)->where('work_test', 2)->get()->count();
             $quiz->quizanswerwrong = PersontestHistory::where('quiz_id',$quiz->id)->where('item', 0)->where('work_test', 3)->get()->count(); 
-            $quiz->quizanswer = PersontestHistory::where('quiz_id',$quiz->id)->where('item', 0)->where('work_test', 2)->orwhere('work_test', 3)->get()->count();
+            $quiz->quizanswer = PersontestHistory::where('quiz_id',$quiz->id)->where('item', 0)->where(function($q) {
+                $q->where('work_test', 2)->orwhere('work_test', 3);
+            })->get()->count();
             $quiz->quizanswershorttime = PersontestHistory::where('quiz_id',$quiz->id)->where('item', 0)->where('work_test', 2)->where('tested_time', '<', $quizshorttime)->get()->count();
             
         //}
@@ -5455,5 +5552,89 @@ class AdminController extends Controller
         }
         $request->session()->flash('status', config('consts')['MESSAGES']['SUCCEED']);
         return Redirect::back();
+    }
+
+    public function self_evaluation_save(Request $request){
+        $self_evaluation_buttons = DB::table('self_evaluation_buttons')->first();
+        $evaluation_button_file = $request->file("evaluation_button");
+        $self_evaluation_file = $request->file("evaluation_sheet");
+        $evaluation_button_url = '';
+        $self_evaluation_sheet_url = '';
+
+        if($evaluation_button_file){
+            $evaluationButtonfilename = $evaluation_button_file->getClientOriginalName();
+
+            $evaluationButtonfilesize = $evaluation_button_file->getClientSize();
+            $maxfilesize = $evaluation_button_file->getMaxFilesize();
+            $maxfilesize1 = round($maxfilesize / 1024 / 1024, 0);
+            if($evaluationButtonfilesize == 0 || $evaluationButtonfilesize > $maxfilesize){
+                return Redirect::back()
+                ->withErrors(["filemaxsize" => 'ファイルは'.$maxfilesize1.'MB以下でしてください。'])
+                ->withInput()
+                ->withTitle('self-evaluation');
+            }else{
+                if(!is_null($self_evaluation_buttons) && file_exists(public_path().$self_evaluation_buttons->evaluation_button_url) && $self_evaluation_buttons->evaluation_button_url != '' && $self_evaluation_buttons->evaluation_button_url != null){
+                    if(file_exists(public_path().$self_evaluation_buttons->evaluation_button_url)){
+                        unlink(public_path().$self_evaluation_buttons->evaluation_button_url);
+                    }
+                }
+                //upload file
+                $evaluation_button_file->move(public_path().'/uploads/files/self_evaluation_first/',$evaluationButtonfilename);
+
+                $evaluation_button_url = '/uploads/files/self_evaluation_first/'.$evaluationButtonfilename;
+            }
+        } else {
+            return Redirect::back()
+            ->withErrors(["nofile" => 'ファイルを選択します。'])
+            ->withInput()
+            ->withTitle('self-evaluation');
+        }
+
+        if($self_evaluation_file){
+            $evaluationfilename = $self_evaluation_file->getClientOriginalName();
+
+            $evaluationfilesize = $self_evaluation_file->getClientSize();
+            $maxfilesize = $self_evaluation_file->getMaxFilesize();
+            $maxfilesize1 = round($maxfilesize / 1024 / 1024, 0);
+            if($evaluationfilesize == 0 || $evaluationfilesize > $maxfilesize){
+                return Redirect::back()
+                ->withErrors(["filemaxsize1" => 'ファイルは'.$maxfilesize1.'MB以下でしてください。'])
+                ->withInput()
+                ->withTitle('self-evaluation');
+            }else{
+                if(!is_null($self_evaluation_buttons) && file_exists(public_path().$self_evaluation_buttons->self_evaluation_sheet_url) && $self_evaluation_buttons->self_evaluation_sheet_url != '' && $self_evaluation_buttons->self_evaluation_sheet_url != null){
+                    if(file_exists(public_path().$self_evaluation_buttons->self_evaluation_sheet_url)){
+                        unlink(public_path().$self_evaluation_buttons->self_evaluation_sheet_url);
+                    }
+                }
+                //upload file
+                $self_evaluation_file->move(public_path().'/uploads/files/self_evaluation_first/',$evaluationfilename);
+
+                $self_evaluation_sheet_url = '/uploads/files/self_evaluation_first/'.$evaluationfilename;
+            }
+        } else {
+            return Redirect::back()
+            ->withErrors(["nofile" => 'ファイルを選択します。'])
+            ->withInput()
+            ->withTitle('self-evaluation');
+        }
+
+        if ($self_evaluation_sheet_url != '') {
+            if(!is_null($self_evaluation_buttons)){
+                $self_evaluation_buttons = SelfEvaluationButtons::first();
+                $self_evaluation_buttons->self_evaluation_sheet_url = $self_evaluation_sheet_url;
+                $self_evaluation_buttons->evaluation_button_url = $evaluation_button_url;
+                $self_evaluation_buttons->save();
+            }
+            else{
+                $self_evaluation_buttons = SelfEvaluationButtons::create();
+                $self_evaluation_buttons->self_evaluation_sheet_url = $self_evaluation_sheet_url;
+                $self_evaluation_buttons->evaluation_button_url = $evaluation_button_url;
+                $self_evaluation_buttons->save();
+            }
+            $request->session()->flash('status', config('consts')['MESSAGES']['SUCCEED']);
+            return Redirect::back();
+        }
+
     }
 }

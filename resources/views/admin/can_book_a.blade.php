@@ -153,7 +153,7 @@
                 }
             });
 			$("select[name=type]").change(function(){
-				if ($(this).val() == "0"){
+				if ($(this).val() == "1"){
 					$(".param").each(function(index, item){
 							$(item).val("");
 					})
@@ -161,7 +161,7 @@
 					$("input[name=total_chars]").val("");
 					$("input[name=point]").val("");
 				}
-				else if (($(this).val() == "1")){
+				else if (($(this).val() == "0")){
 					$(".param").each(function(index, item){
 						$(item).val("0");
 					})
@@ -181,8 +181,9 @@
                 var uncertCheck = $("#answer2").attr('checked');
                 if (uncertCheck) {
                     $("#certWaningModal").modal('show');
+                } else {
+		    	    $("#book-register-form").submit();
                 }
-		    	// $("#book-register-form").submit();
 		    });
 
             $(".modal-ok").click(function() {
